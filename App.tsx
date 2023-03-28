@@ -1,12 +1,20 @@
 import React, {useState} from 'react';
-import {Alert, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
-import MindView, {Mind} from './src/components/Mind';
+import {
+  Alert,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
+import MindView from './src/components/Mind';
 import MindInput from './src/components/MindInput';
+import {Mind} from './types/mind.interface';
 
 const mind1: Mind = {
   id: '123',
   text: '비난하지 않기',
-  checked: false,
+  completed: false,
 };
 
 function App(): JSX.Element {
@@ -16,34 +24,41 @@ function App(): JSX.Element {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
       <View style={styles.innerContainer}>
-        <View style={styles.mindList}>
+        <ScrollView style={styles.mindList}>
           {mindList.map(mind => (
             <MindView
               key={mind.id}
               {...mind}
+              styleProps={styles.mindView}
               setChecked={() => {
                 setMindList(s =>
                   s.map(v => {
                     if (v.id === mind.id) {
                       return {
                         ...v,
-                        checked: !v.checked,
+                        completed: !v.completed,
                       };
                     }
                     return v;
                   }),
                 );
               }}
+              onDelete={() => {
+                setMindList(s => s.filter(v => v.id !== mind.id));
+              }}
             />
           ))}
-        </View>
+        </ScrollView>
         <View style={styles.mindInput}>
           <MindInput
             onAdd={text => {
               if (mindList.some(s => s.text === text)) {
                 return Alert.alert('이미 있는 Mind입니다.');
               }
-              setMindList(s => [...s, {id: '1' + text, text, checked: false}]);
+              setMindList(s => [
+                ...s,
+                {id: '1' + text, text, completed: false},
+              ]);
             }}
           />
         </View>
@@ -63,8 +78,9 @@ const styles = StyleSheet.create({
     padding: 28,
     backgroundColor: '#D9D9D9',
   },
-  mindList: {
-    gap: 18,
+  mindList: {},
+  mindView: {
+    marginBottom: 18,
   },
   mindInput: {
     marginTop: 'auto',
