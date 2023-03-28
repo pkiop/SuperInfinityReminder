@@ -13,6 +13,7 @@ import CrossIcon from '../Icons/cross.svg';
 import TrashIcon from '../Icons/trash.svg';
 
 interface MindProps extends Mind {
+  onPress?: () => void;
   onDelete?: () => void;
   setChecked?: () => void;
   styleProps?: ViewStyle;
@@ -21,6 +22,7 @@ interface MindProps extends Mind {
 export default function MindView({
   text,
   completed,
+  onPress,
   onDelete,
   setChecked,
   styleProps,
@@ -28,13 +30,15 @@ export default function MindView({
   return (
     <Pressable
       style={{...styleProps, ...styles.mindContainer}}
-      onPress={setChecked}>
+      onPress={onPress}>
       <View style={styles.mindView}>
-        {completed ? (
-          <CheckIcon width={18} height={18} />
-        ) : (
-          <CrossIcon width={18} height={18} />
-        )}
+        <TouchableOpacity activeOpacity={0.3} onPress={setChecked}>
+          {completed ? (
+            <CheckIcon width={18} height={18} />
+          ) : (
+            <CrossIcon width={18} height={18} />
+          )}
+        </TouchableOpacity>
         <Text style={styles.mindText}>{text}</Text>
       </View>
       <TouchableOpacity activeOpacity={0.3} onPress={onDelete}>
