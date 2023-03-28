@@ -1,117 +1,73 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, {useState} from 'react';
+import {Alert, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
+import MindView, {Mind} from './src/components/Mind';
+import MindInput from './src/components/MindInput';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+const mind1: Mind = {
+  id: '123',
+  text: '비난하지 않기',
+  checked: false,
+};
 
 function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const [mindList, setMindList] = useState<Mind[]>([mind1]);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
+      <View style={styles.innerContainer}>
+        <View style={styles.mindList}>
+          {mindList.map(mind => (
+            <MindView
+              key={mind.id}
+              {...mind}
+              setChecked={() => {
+                setMindList(s =>
+                  s.map(v => {
+                    if (v.id === mind.id) {
+                      return {
+                        ...v,
+                        checked: !v.checked,
+                      };
+                    }
+                    return v;
+                  }),
+                );
+              }}
+            />
+          ))}
         </View>
-      </ScrollView>
+        <View style={styles.mindInput}>
+          <MindInput
+            onAdd={text => {
+              if (mindList.some(s => s.text === text)) {
+                return Alert.alert('이미 있는 Mind입니다.');
+              }
+              setMindList(s => [...s, {id: '1' + text, text, checked: false}]);
+            }}
+          />
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    backgroundColor: 'gray',
+    height: '100%',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  innerContainer: {
+    flex: 1,
+    margin: 24,
+    padding: 28,
+    backgroundColor: '#D9D9D9',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  mindList: {
+    gap: 18,
   },
-  highlight: {
-    fontWeight: '700',
+  mindInput: {
+    marginTop: 'auto',
   },
 });
 
