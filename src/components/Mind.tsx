@@ -8,9 +8,8 @@ import {
   ViewStyle,
 } from 'react-native';
 import {Mind} from '../../types/mind.interface';
-import CheckIcon from '../Icons/check.svg';
-import CrossIcon from '../Icons/cross.svg';
-import TrashIcon from '../Icons/trash.svg';
+import {CheckIcon, CrossIcon, TrashIcon} from '../Icons';
+import color from '../styles/color';
 
 interface MindProps extends Mind {
   onPress?: () => void;
@@ -53,10 +52,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'skyblue',
+    backgroundColor: color.primary[80],
     height: 56,
     paddingHorizontal: 16,
     paddingVertical: 14,
+    borderRadius: 8,
   },
   mindView: {
     flexDirection: 'row',
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   mindText: {
     flexDirection: 'row',
     alignItems: 'center',
-    color: 'black',
+    color: color.black,
     fontSize: 20,
   },
   mindIcon: {

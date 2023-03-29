@@ -9,7 +9,7 @@ interface MindInputProps {
 
 export default function MindInput({onAdd}: MindInputProps) {
   const textRef = useRef<TextInput>(null);
-  const [text, setText] = useState('wetwet');
+  const [text, setText] = useState('');
   const onSubmit = () => {
     text !== '' && onAdd(text);
     setText('');
@@ -25,6 +25,7 @@ export default function MindInput({onAdd}: MindInputProps) {
           setText(v.nativeEvent.text);
         }}
         onSubmitEditing={onSubmit}
+        style={styles.input}
       />
       <TouchableOpacity activeOpacity={0.3} onPress={onSubmit}>
         <AddIcon width={28} height={28} />
@@ -45,5 +46,6 @@ const styles = StyleSheet.create({
   },
   input: {
     ...typography.subtitle2,
+    flex: 1,
   },
 });

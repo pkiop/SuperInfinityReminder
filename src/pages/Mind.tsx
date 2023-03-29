@@ -3,6 +3,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {StatusBar, StyleSheet} from 'react-native';
 import {MindScreenProps} from '../routes';
 import MindDetail from '../components/MindDetail';
+import color from '../styles/color';
 
 export default function MindPage({route}: MindScreenProps) {
   const {id, text, completed} = route.params;
@@ -17,7 +18,7 @@ export default function MindPage({route}: MindScreenProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'gray',
+    backgroundColor: color.appBackground,
     flex: 1,
   },
 });
