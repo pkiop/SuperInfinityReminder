@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Alert,
   SafeAreaView,
@@ -11,15 +11,21 @@ import MindView from '../components/Mind';
 import MindInput from '../components/MindInput';
 import {Mind} from '../../types/mind.interface';
 import {HomeScreenProps} from '../routes';
-
-const mind1: Mind = {
-  id: '123',
-  text: '비난하지 않기',
-  completed: false,
-};
+import minds from '../models/minds';
 
 function MainPage({navigation}: HomeScreenProps) {
-  const [mindList, setMindList] = useState<Mind[]>([mind1]);
+  const [mindList, setMindList] = useState<Mind[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      minds.getMinds().then(setMindList);
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    minds.setMinds(mindList);
+  }, [mindList]);
 
   return (
     <SafeAreaView style={styles.container}>
