@@ -15,10 +15,12 @@ import minds from '../models/minds';
 
 function MainPage({navigation}: HomeScreenProps) {
   const [mindList, setMindList] = useState<Mind[]>([]);
-
+  const fetchData = () => {
+    minds.getMinds().then(setMindList);
+  };
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      minds.getMinds().then(setMindList);
+      fetchData();
     });
     return unsubscribe;
   }, [navigation]);
@@ -65,10 +67,7 @@ function MainPage({navigation}: HomeScreenProps) {
               if (mindList.some(s => s.text === text)) {
                 return Alert.alert('이미 있는 Mind입니다.');
               }
-              setMindList(s => [
-                ...s,
-                {id: '1' + text, text, completed: false},
-              ]);
+              minds.addMind({text, completed: false}).then(() => fetchData());
             }}
           />
         </View>
