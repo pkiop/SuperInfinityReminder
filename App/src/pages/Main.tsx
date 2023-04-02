@@ -56,7 +56,7 @@ function MainPage({navigation}: HomeScreenProps) {
                 );
               }}
               onDelete={() => {
-                setMindList(s => s.filter(v => v.id !== mind.id));
+                minds.deleteMind(mind.id).then(() => fetchData());
               }}
             />
           ))}

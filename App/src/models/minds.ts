@@ -1,10 +1,10 @@
 import {CreateMindDto, Mind} from '../../types/mind.interface';
-import {createMind, getAllMinds} from '../api/mind';
+import mindApi from '../api/mind';
 import storage from '../storage';
 
 const getMinds = async () => {
   // const minds: Mind[] = (await storage.getItem('minds')) || [];
-  const minds: Mind[] = (await getAllMinds()) || [];
+  const minds: Mind[] = (await mindApi.getAllMinds()) || [];
   return minds;
 };
 
@@ -13,7 +13,11 @@ const setMinds = async (minds: Mind[]) => {
 };
 
 const addMind = async (mind: CreateMindDto) => {
-  await createMind(mind);
+  await mindApi.createMind(mind);
+};
+
+const deleteMind = async (id: number) => {
+  await mindApi.deleteMind(id);
 };
 
 const setMind = async (mind: Mind) => {
@@ -27,4 +31,4 @@ const setMind = async (mind: Mind) => {
   setMinds(newMinds);
 };
 
-export default {getMinds, setMinds, addMind, setMind};
+export default {getMinds, setMinds, addMind, setMind, deleteMind};
